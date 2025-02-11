@@ -4,13 +4,19 @@ import json
 import time
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-import http.client, urllib
+from twilio.rest import Client
+
 
 # Load environment variables
 load_dotenv()
 API_KEY = os.getenv("WAQI_API_KEY")
-PUSHOVER_API_TOKEN = os.getenv("PUSHOVER_TOKEN")
-PUSHOVER_USER_KEY = os.getenv("PUSHOVER_USER")
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
+RECIPIENT_PHONE_NUMBER = os.getenv("RECIPIENT_PHONE_NUMBER")
+
+# Initialize Twilio client
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Set the unhealthy AQI threshold
 UNHEALTHY_THRESHOLD = 150
@@ -31,19 +37,13 @@ def get_aqi_data():
         raise ValueError("Error fetching AQI data")
 
 def send_alert(aqi):
-    """Sends an alert via Pushover if AQI is above the unhealthy threshold."""
-    conn = http.client.HTTPSConnection("api.pushover.net:443")
-    conn.request("POST", "/1/messages.json",
-        urllib.parse.urlencode({
-            "token": PUSHOVER_API_TOKEN,
-            "user": PUSHOVER_USER_KEY,
-            "message": f"Alert! The AQI in Bangkok is {aqi}, which is above the unhealthy threshold of {UNHEALTHY_THRESHOLD}."
-        }), { "Content-type": "application/x-www-form-urlencoded" })
-    response = conn.getresponse()
-    if response.status == 200:
-        print("Alert sent successfully.")
-    else:
-        print(f"Failed to send alert: {response.status} - {response.read().decode()}")
+    """Sends an alert via Twilio if AQI is above the unhealthy threshold."""
+    message = client.messages.create(
+        body=f"Alert! The AQI in Bangkok is {aqi}, which is above the unhealthy threshold of {UNHEALTHY_THRESHOLD}.",
+        from_=TWILIO_PHONE_NUMBER,
+        to=RECIPIENT_PHONE_NUMBER
+    )
+    print(f"Alert sent: {message.sid}")
 
 def main():
     global unhealthy_alert_sent
