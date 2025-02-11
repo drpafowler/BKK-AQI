@@ -1,0 +1,13 @@
+# List of dependencies
+#ipython
+#ipykernel
+#numpy
+#pandas
+#matplotlib
+#seaborn
+#kafka-python
+
+# The following are for main.py
+requests
+python-dotenv
+twilio
