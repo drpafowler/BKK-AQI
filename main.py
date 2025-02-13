@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import http.client, urllib
 
+
 # Load environment variables
 load_dotenv()
 API_KEY = os.getenv("WAQI_API_KEY")
