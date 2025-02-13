@@ -6,12 +6,22 @@ This is a project to create an app that does stuff.  The stuff that it does is t
 Philip Fowler
 
 
-## Usage
+# Usage
 Instructions on how to use your project.
-```python3
->>> import mypackage
->>> mypackage.do_stuff()
+
+## Installation  
+### Phone Notifications
+First, use the .env example file to add your own information.  Then, run the following command to install the necessary packages:
 ```
-            
-## Installation
-Instructions on how to install your project.
+# Dockerfile, Image, Container
+FROM python:3.11
+
+ADD main.py .
+ADD .env .
+
+RUN pip install requests python-dotenv twilio
+
+CMD ["python", "./main.py"]
+```
+
+### Air Quality API
