@@ -11,11 +11,13 @@ import json
 import time
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-import kafka
+from kafka import KafkaProducer
 
 # Load environment variables
 load_dotenv()
 API_KEY = os.getenv("WAQI_API_KEY")
+KAFKA_TOPIC = 'bkk-aqi'
+KAFKA_BROKER = 'localhost:9092'
 
 def get_aqi_data():
     """Fetches AQI data from the WAQI API."""
@@ -24,19 +26,34 @@ def get_aqi_data():
     data = response.json()
     
     if data['status'] == 'ok':
-        aqi = data['data']['aqi']
-        return aqi
+        aqi_data = {
+            "aqi": data['data']['aqi'],
+            "co": data['data']['iaqi']['co']['v'],
+            "h": data['data']['iaqi']['h']['v'],
+            "no2": data['data']['iaqi']['no2']['v'],
+            "o3": data['data']['iaqi']['o3']['v'],
+            "pressure": data['data']['iaqi']['p']['v'],
+            "pm10": data['data']['iaqi']['pm10']['v'],
+            "pm25": data['data']['iaqi']['pm25']['v'],
+            "so2": data['data']['iaqi']['so2']['v'],
+            "temperature": data['data']['iaqi']['t']['v'],
+            "wind": data['data']['iaqi']['w']['v'],
+            "time_iso": data['data']['time']['iso'],
+            "city_geo": data['data']['city']['geo'],
+            "city_name": data['data']['city']['name']
+        }
+        return aqi_data
     else:
         raise ValueError("Error fetching AQI data")
 
 def main():
-    producer = kafka.KafkaProducer(bootstrap_servers='localhost:9092')
+    producer = KafkaProducer(bootstrap_servers=KAFKA_BROKER, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
     while True:
         try:
-            aqi = get_aqi_data()
-            print(f"Current AQI: {aqi}")
-            producer.send('aqi', json.dumps(aqi).encode())
-            time.sleep(60)
+            aqi_data = get_aqi_data()
+            print(f"Current AQI Data: {aqi_data}")
+            producer.send(KAFKA_TOPIC, aqi_data)
+            time.sleep(300)
         except Exception as e:
             print(f"Error: {e}")
 

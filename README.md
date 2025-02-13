@@ -11,7 +11,7 @@ Instructions on how to use your project.
 
 ## Installation  
 ### Phone Notifications
-First, use the .env example file to add your own information.  Then, run the following command to install the necessary packages:
+First, use the .env example file to add your own information.  Save it as .env Then, run the following command to install the necessary packages:
 ```
 # Dockerfile, Image, Container
 FROM python:3.11

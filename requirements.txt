@@ -1,13 +1,17 @@
-# List of dependencies
-#ipython
-#ipykernel
-#numpy
-#pandas
-#matplotlib
-#seaborn
-#kafka-python
+# List of dependencies for analysis
+ipython
+ipykernel
+numpy
+pandas
+matplotlib
+seaborn
+kafka-python
+aqipy-atmotech
 
 # The following are for main.py
 requests
 python-dotenv
 
+# For Streamlit
+streamlit
+plotly
