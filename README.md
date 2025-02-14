@@ -8,7 +8,9 @@ Philip Fowler
 # Usage
 Instructions on how to use your project.
 You will need an WAQI API key from https://aqicn.org/api/ to use this project  
-
+''' python
+python3.11 main.py
+'''
 ## Installation  
 ### Phone Notifications - Proof of Concept - located in the archived folder
 First, use the .env example file to add your own information.  Save it as .env Then, run the following command to install the necessary packages:
