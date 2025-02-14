@@ -1,6 +1,135 @@
+# import libraries
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.express as px
+import seaborn as sns
+import sqlite3  
+from aqipy import aqi_us
+from aqipy import aqi_cn
+from aqipy import aqi_au
+from aqipy import caqi_eu
+from aqipy import cai_kr
+from aqipy import daqi_uk
+from aqipy import aqhi_ca
+from aqipy import psi_sg
 
+# Load data
+import os
+
+########################################
+# connect to the db and load the data
+########################################
+
+conn = sqlite3.connect('./data/bkk_aqi.db')
+c = conn.cursor()
+aqi_data = pd.read_sql_query("SELECT * FROM aqi_data", conn)
+aqi_data['time_iso'] = pd.to_datetime(aqi_data['time_iso'])
+aqi_data = aqi_data.set_index('time_iso')
+
+########################################
+# organize the necessary data
+########################################
+
+# Pull the most recent so2 data
+recent_so2 = aqi_data['so2'].iloc[-1]
+
+# Pull the most recent 1 hours of data
+recent_data_1h = aqi_data[aqi_data.index >= (aqi_data.index.max() - pd.Timedelta(hours=1))]
+
+#calculate the mean of the most recent 1 hour of data for o3, no2, pm10 and so2
+mean_o3_1h = recent_data_1h['o3'].mean()
+mean_no2_1h = recent_data_1h['no2'].mean()
+mean_so2_1h = recent_data_1h['so2'].mean()
+mean_pm10_1h = recent_data_1h['pm10'].mean()
+mean_pm25_1h = recent_data_1h['pm25'].mean()
+mean_co_1h = recent_data_1h['co'].mean()
+
+# Calculate the max of the most recent 1 hour of data for o3, no2, and so2
+max_o3_1h = recent_data_1h['o3'].max()
+max_no2_1h = recent_data_1h['no2'].max()
+max_so2_1h = recent_data_1h['so2'].max()
+
+# Pull the most recent 3 hours of data
+recent_data_3h = aqi_data[aqi_data.index >= (aqi_data.index.max() - pd.Timedelta(hours=3))]
+
+# Calculate the mean of the recent 3 hours of data for pm10, pm25, o3, so2, no2 and co
+mean_pm10_3h = recent_data_3h['pm10'].mean()
+mean_pm25_3h = recent_data_3h['pm25'].mean()
+mean_o3_3h = recent_data_3h['o3'].mean()
+mean_so2_3h = recent_data_3h['so2'].mean()
+mean_no2_3h = recent_data_3h['no2'].mean()
+mean_co_3h = recent_data_3h['co'].mean()
+
+# Pull the most recent 4 hours of data
+recent_data_4h = aqi_data[aqi_data.index >= (aqi_data.index.max() - pd.Timedelta(hours=4))]
+
+# Calculate the mean of the recent 4 hours of data for o3
+mean_o3_4h = recent_data_4h['o3'].mean()
+
+# Pull the most recent 8 hours of data
+recent_data_8h = aqi_data[aqi_data.index >= (aqi_data.index.max() - pd.Timedelta(hours=8))]
+
+# Calculate the mean of the recent 8 hours of data for o3 and co
+mean_o3_8h = recent_data_8h['o3'].mean()
+mean_co_8h = recent_data_8h['co'].mean()
+
+# Pull the most recent 24 hours of data
+recent_data_24h = aqi_data[aqi_data.index >= (aqi_data.index.max() - pd.Timedelta(hours=24))]
+
+# Calculate the mean of the recent 24 hours of data for pm10, pm25, co2 and so2
+mean_pm10_24h = recent_data_24h['pm10'].mean()
+mean_pm25_24h = recent_data_24h['pm25'].mean()
+mean_so2_24h = recent_data_24h['so2'].mean()
+mean_co_24h = recent_data_24h['co'].mean()
+
+########################################
+# Calculations for the different country AQI
+########################################
+
+# Get PSI using the sg calculations 
+aqi_sg, aqi_data_sg = psi_sg.get_aqi(o3_8h=mean_o3_8h, co_8h=mean_co_8h, pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_1h=mean_no2_1h)
+
+# Find the pollutant with the maximum AQI value
+max_pollutant = max(aqi_data_sg, key=lambda k: aqi_data_sg[k][0])
+
+# Get AQI using the us calculations 
+aqi_us, aqi_data_us = aqi_us.get_aqi(o3_8h=mean_o3_8h, co_8h=mean_co_8h, pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_1h=mean_no2_1h, o3_1h=max_o3_1h)
+
+# Find the pollutant with the maximum AQI value
+max_pollutant = max(aqi_data_us, key=lambda k: aqi_data_us[k][0])
+
+# AQI using the Australia calculations
+aqi_au, aqi_data_au = aqi_au.get_aqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_1h=mean_no2_1h, o3_1h=max_o3_1h, o3_4h=mean_o3_4h, co_8h=mean_co_8h)
+
+# Find the pollutant with the maximum AQI value
+max_pollutant = max(aqi_data_au, key=lambda k: aqi_data_au[k][0])
+
+# AQI using the EU calculations
+caqi_eu, aqi_data_eu = caqi_eu.get_caqi(pm10_24h=mean_pm10_24h, pm10_1h=mean_pm10_1h, pm25_24h=mean_pm25_24h, pm25_1h=mean_pm25_1h, so2_max_1h=max_so2_1h, no2_max_1h=max_no2_1h, o3_max_1h=max_o3_1h, co_1h=mean_co_1h)
+
+# AQI using the China calculations
+aqi_cn, aqi_data_cn = aqi_cn.get_aqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_24h=mean_no2_3h, o3_8h=mean_o3_8h, co_24h=mean_co_24h, o3_1h=mean_o3_1h)
+
+# Find the pollutant with the maximum AQI value
+max_pollutant = max(aqi_data_cn, key=lambda k: aqi_data_cn[k][0])
+
+# using the uk calculations
+daqi_uk, aqi_data_uk = daqi_uk.get_daqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_15m=recent_so2, no2_1h=mean_no2_1h, o3_1h=mean_o3_1h)
+
+# Find the pollutant with the maximum AQI value
+max_pollutant = max(aqi_data_uk, key=lambda k: aqi_data_uk[k][0])
+
+# AQI using the Korean calculations
+cai_kr, aqi_data_kr = cai_kr.get_aqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, no2_1h=mean_no2_1h, so2_1h=mean_so2_1h, o3_1h=mean_o3_1h)
+
+# Find the pollutant with the maximum AQI value
+max_pollutant = max(aqi_data_kr, key=lambda k: aqi_data_kr[k][0])
+
+# AQI using the Canadian calculations
+aqhi_ca, aqi_data_ca, _ = aqhi_ca.get_aqhi(pm10_3h=mean_pm10_3h, pm25_3h=mean_pm25_3h, no2_3h=mean_no2_3h, o3_3h=mean_o3_3h)
+
+########################################
+# Streamlit
+########################################
