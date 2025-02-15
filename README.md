@@ -25,7 +25,18 @@ Create your usual virtual environment based on python 3.11. This won't work with
 pip install -r requirements.txt
 ```
 
-## You are going to need to start your usual Kafka and Zookeeper services.  You can do this by running the following command:
+## You are going to need to start your usual Kafka and Zookeeper services.  
+You can do this by running the following command:
+
+From a terminal
+```bash
+kafka-server-start /usr/local/etc/kafka/server.properties
+```
+and
+```bash
+zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties
+```
+Or, if you are using docker for your zookeeper and kafka services, you can start them by running the following command:
 
 ```bash
 docker-compose up

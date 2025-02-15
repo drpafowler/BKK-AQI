@@ -225,15 +225,19 @@ with row2:
 
     st.pyplot(fig)
 
-    st.write('source: https://document.airnow.gov/technical-assistance-document-for-the-reporting-of-daily-air-quailty.pdf')
-    st.write('source: https://www.airnow.gov/sites/default/files/2018-05/aqi-technical-assistance-document-may2016.pdf')
-    st.write('source: https://www.haze.gov.sg/docs/default-source/faq/computation-of-the-pollutant-standards-index-(psi).pdf')
-    st.write('source: https://www.eea.europa.eu/themes/air/air-quality-index')
-    st.write('source: https://uk-air.defra.gov.uk/assets/documents/reports/cat14/1304251155_Update_on_Implementation_of_the_DAQI_April_2013_Final.pdf')
-    st.write('source: https://www.airqualityontario.com/science/aqhi/')
-    st.write('source: https://www.airqualitynow.eu/download/CITEAIR-Comparing_Urban_Air_Quality_across_Borders.pdf')
-    st.write('source: https://www.airkorea.or.kr/web/last_amb_hour_data?pMENU_NO=123')
-    st.write('source: http://www.airkorea.or.kr/eng/khaiInfo?pMENU_NO=166')
-    st.write('source: https://core.ac.uk/download/pdf/38094372.pdf')
-    st.write('source: https://www.environment.nsw.gov.au/topics/air/understanding-air-quality-data/air-quality-index')
+    st.markdown("""
+        <div style='font-size: 10px; line-height: 1;'>
+            source: https://document.airnow.gov/technical-assistance-document-for-the-reporting-of-daily-air-quailty.pdf<br>
+            source: https://www.airnow.gov/sites/default/files/2018-05/aqi-technical-assistance-document-may2016.pdf<br>
+            source: https://www.haze.gov.sg/docs/default-source/faq/computation-of-the-pollutant-standards-index-(psi).pdf<br>
+            source: https://www.eea.europa.eu/themes/air/air-quality-index<br>
+            source: https://uk-air.defra.gov.uk/assets/documents/reports/cat14/1304251155_Update_on_Implementation_of_the_DAQI_April_2013_Final.pdf<br>
+            source: https://www.airqualityontario.com/science/aqhi/<br>
+            source: https://www.airqualitynow.eu/download/CITEAIR-Comparing_Urban_Air_Quality_across_Borders.pdf<br>
+            source: https://www.airkorea.or.kr/web/last_amb_hour_data?pMENU_NO=123<br>
+            source: http://www.airkorea.or.kr/eng/khaiInfo?pMENU_NO=166<br>
+            source: https://core.ac.uk/download/pdf/38094372.pdf<br>
+            source: https://www.environment.nsw.gov.au/topics/air/understanding-air-quality-data/air-quality-index
+        </div>
+    """, unsafe_allow_html=True)
 
