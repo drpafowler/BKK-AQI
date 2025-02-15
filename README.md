@@ -21,46 +21,48 @@ Create your usual virtual environment based on python 3.11. This won't work with
 
 ## You will need to install the necessary packages.  You can do this by running the following command:
 
-'''python
+```python
 pip install -r requirements.txt
-'''
+```
 
 ## You are going to need to start your usual Kafka and Zookeeper services.  You can do this by running the following command:
 
-'''
+```
 docker-compose up
-'''
+```
 
 Or be lazy like I am and just click the Docker Desktop icon on your toolbar.  This will start the services for you too.
 
 ## Start the producer by running the following command:
-'''
+
+```
 python3.11 producer.py
-'''
+```
 
 ## Start the consumer by running the following command:
-'''
+```
 python3.11 consumer.py
-'''
+```
 
 Note: The consumer will create a database called bkk_aqi.db.  This database will be used to store the air quality data.  
 
 
 ## To start the notification program, you will need to run the following command:
-''' 
+``` 
 python3.11 main.py
-'''
+```
 
 ## To start the streamlit dashboard, you will need to run the following command:
-'''
+
+```
 streamlit run app.py
-'''
+```
 
 
 # Archived Materials - This is just for reference  
 ## Phone Notifications - Proof of Concept - located in the archived folder
 First, use the .env example file to add your own information.  Save it as .env Then, run the following command to install the necessary packages:
-```
+
 # Dockerfile, Image, Container
 FROM python:3.11
 
