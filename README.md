@@ -20,7 +20,8 @@ You will need to create a .env based on the env example template.
 Create your usual virtual environment based on python 3.11. This won't work with 3.12. I am assuming that you know how to do this. If you don't, you can find instructions at https://docs.python.org/3/library/venv.html
 
 ## You will need to install the necessary packages.  You can do this by running the following command:
-'''
+
+'''python
 pip install -r requirements.txt
 '''
 
