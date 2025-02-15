@@ -159,3 +159,5 @@ elif option == 'Canada':
     st.write('Canada AQI:', aqhi_ca)
 elif option == 'Singapore':
     st.write('Singapore PSI:', aqi_sg)
+    st.write('Pollutant with the maximum AQI value:', max_pollutant)
+    st.write('Singapore PSI General Message:', aqi_data_sg[max_pollutant][1])

@@ -13,9 +13,9 @@ Philip Fowler
 # Usage
 ## Instructions on how to use this project.
 You will need an WAQI API key from https://aqicn.org/api/ to use this project  
-You will need a Pushover account to use this project.  You can get one at https://pushover.net/
+You will need a Pushover account to use this project.  You can get one at https://pushover.net/ Make sure that the app is installed on your phone too.
 
-You will need to create a .env based on the env example template.
+You will need to create a .env based on the .env example template.
 
 Create your usual virtual environment based on python 3.11. This won't work with 3.12. I am assuming that you know how to do this. If you don't, you can find instructions at https://docs.python.org/3/library/venv.html
 
