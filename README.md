@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 ## You are going to need to start your usual Kafka and Zookeeper services.  You can do this by running the following command:
 
-```
+```bash
 docker-compose up
 ```
 
@@ -65,7 +65,7 @@ streamlit run app.py
 ## Phone Notifications - Proof of Concept - located in the archived folder
 First, use the .env example file to add your own information.  Save it as .env Then, run the following command to install the necessary packages:
 
-# Dockerfile, Image, Container
+## Dockerfile, Image, Container
 ```
 FROM python:3.11
 
