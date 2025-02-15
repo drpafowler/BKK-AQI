@@ -83,7 +83,8 @@ python3.11 main.py
 ```
 streamlit run app.py
 ```
-
+You should end up with a dashboard that looks like this:
+![Dashboard Screenshot](assets/screenshot.png)
 
 # Archived Materials - This is just for reference  
 ## Phone Notifications - Proof of Concept - located in the archived folder
