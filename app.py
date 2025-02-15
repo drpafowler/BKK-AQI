@@ -85,7 +85,7 @@ mean_so2_24h = recent_data_24h['so2'].mean()
 mean_co_24h = recent_data_24h['co'].mean()
 
 ########################################
-# Calculations for the different country AQI
+# Necessary values for the different country AQI calculations
 ########################################
 
 # Get PSI using the sg calculations 
@@ -133,3 +133,29 @@ aqhi_ca, aqi_data_ca, _ = aqhi_ca.get_aqhi(pm10_3h=mean_pm10_3h, pm25_3h=mean_pm
 ########################################
 # Streamlit
 ########################################
+
+st.title('Bangkok Air Quality Index (AQI) Dashboard')
+st.write('This dashboard provides real-time air quality data for Bangkok, Thailand.')
+
+st.header('Current Air Quality Data')
+option = st.sidebar.radio(
+    "Select the AQI calculation method:",
+    ('Australia', 'EU', 'China', 'US', 'Korea', 'UK', 'Canada', 'Singapore')
+)
+
+if option == 'Australia':
+    st.write('Australia AQI:', aqi_au)
+elif option == 'EU':
+    st.write('EU AQI:', caqi_eu)
+elif option == 'China':
+    st.write('China AQI:', aqi_cn)
+elif option == 'US':
+    st.write('US AQI:', aqi_us)
+elif option == 'Korea':
+    st.write('Korea AQI:', cai_kr)
+elif option == 'UK':
+    st.write('UK AQI:', daqi_uk)
+elif option == 'Canada':
+    st.write('Canada AQI:', aqhi_ca)
+elif option == 'Singapore':
+    st.write('Singapore AQI:', aqi_sg)
