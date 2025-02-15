@@ -25,9 +25,11 @@ pip install -r requirements.txt
 '''
 
 ## You are going to need to start your usual Kafka and Zookeeper services.  You can do this by running the following command:
+
 '''
 docker-compose up
 '''
+
 Or be lazy like I am and just click the Docker Desktop icon on your toolbar.  This will start the services for you too.
 
 ## Start the producer by running the following command:
