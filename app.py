@@ -92,19 +92,19 @@ mean_co_24h = recent_data_24h['co'].mean()
 aqi_sg, aqi_data_sg = psi_sg.get_aqi(o3_8h=mean_o3_8h, co_8h=mean_co_8h, pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_1h=mean_no2_1h)
 
 # Find the pollutant with the maximum AQI value
-max_pollutant = max(aqi_data_sg, key=lambda k: aqi_data_sg[k][0])
+max_pollutant_sg = max(aqi_data_sg, key=lambda k: aqi_data_sg[k][0])
 
 # Get AQI using the us calculations 
 aqi_us, aqi_data_us = aqi_us.get_aqi(o3_8h=mean_o3_8h, co_8h=mean_co_8h, pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_1h=mean_no2_1h, o3_1h=max_o3_1h)
 
 # Find the pollutant with the maximum AQI value
-max_pollutant = max(aqi_data_us, key=lambda k: aqi_data_us[k][0])
+max_pollutant_us = max(aqi_data_us, key=lambda k: aqi_data_us[k][0])
 
 # AQI using the Australia calculations
 aqi_au, aqi_data_au = aqi_au.get_aqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_1h=mean_no2_1h, o3_1h=max_o3_1h, o3_4h=mean_o3_4h, co_8h=mean_co_8h)
 
 # Find the pollutant with the maximum AQI value
-max_pollutant = max(aqi_data_au, key=lambda k: aqi_data_au[k][0])
+max_pollutant_au = max(aqi_data_au, key=lambda k: aqi_data_au[k][0])
 
 # AQI using the EU calculations
 caqi_eu, aqi_data_eu = caqi_eu.get_caqi(pm10_24h=mean_pm10_24h, pm10_1h=mean_pm10_1h, pm25_24h=mean_pm25_24h, pm25_1h=mean_pm25_1h, so2_max_1h=max_so2_1h, no2_max_1h=max_no2_1h, o3_max_1h=max_o3_1h, co_1h=mean_co_1h)
@@ -113,19 +113,19 @@ caqi_eu, aqi_data_eu = caqi_eu.get_caqi(pm10_24h=mean_pm10_24h, pm10_1h=mean_pm1
 aqi_cn, aqi_data_cn = aqi_cn.get_aqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_24h=mean_so2_24h, no2_24h=mean_no2_3h, o3_8h=mean_o3_8h, co_24h=mean_co_24h, o3_1h=mean_o3_1h)
 
 # Find the pollutant with the maximum AQI value
-max_pollutant = max(aqi_data_cn, key=lambda k: aqi_data_cn[k][0])
+max_pollutant_cn = max(aqi_data_cn, key=lambda k: aqi_data_cn[k][0])
 
 # using the uk calculations
 daqi_uk, aqi_data_uk = daqi_uk.get_daqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, so2_15m=recent_so2, no2_1h=mean_no2_1h, o3_1h=mean_o3_1h)
 
 # Find the pollutant with the maximum AQI value
-max_pollutant = max(aqi_data_uk, key=lambda k: aqi_data_uk[k][0])
+max_pollutant_uk = max(aqi_data_uk, key=lambda k: aqi_data_uk[k][0])
 
 # AQI using the Korean calculations
 cai_kr, aqi_data_kr = cai_kr.get_aqi(pm10_24h=mean_pm10_24h, pm25_24h=mean_pm25_24h, no2_1h=mean_no2_1h, so2_1h=mean_so2_1h, o3_1h=mean_o3_1h)
 
 # Find the pollutant with the maximum AQI value
-max_pollutant = max(aqi_data_kr, key=lambda k: aqi_data_kr[k][0])
+max_pollutant_kr = max(aqi_data_kr, key=lambda k: aqi_data_kr[k][0])
 
 # AQI using the Canadian calculations
 aqhi_ca, aqi_data_ca, _ = aqhi_ca.get_aqhi(pm10_3h=mean_pm10_3h, pm25_3h=mean_pm25_3h, no2_3h=mean_no2_3h, o3_3h=mean_o3_3h)
@@ -144,20 +144,36 @@ option = st.sidebar.radio(
 )
 
 if option == 'Australia':
-    st.write('Australia AQHI:', aqi_au)
+    st.write('Australia AQI:', aqi_au)
+    st.write('Pollutant with the maximum AQI value:', max_pollutant_au)
+    st.write('Australia AQI General Message:', aqi_data_au[max_pollutant_au][1])
+    st.write('Australia AQI Health Message:', aqi_data_au[max_pollutant_au][2])
 elif option == 'EU':
     st.write('EU CAQI:', caqi_eu)
 elif option == 'China':
     st.write('China AQI:', aqi_cn)
+    st.write('Pollutant with the maximum AQI value:', max_pollutant_cn)
+    st.write('China AQI General Message:', aqi_data_cn[max_pollutant_cn][1])
+    st.write('China AQI Health Message:', aqi_data_cn[max_pollutant_cn][2])
 elif option == 'US':
     st.write('US AQI:', aqi_us)
+    st.write('Pollutant with the maximum AQI value:', max_pollutant_us)
+    st.write('US AQI General Message:', aqi_data_us[max_pollutant_us][1])
+    st.write('US AQI Health Message:', aqi_data_us[max_pollutant_us][2])
 elif option == 'Korea':
     st.write('Korea CAI:', cai_kr)
+    st.write('Pollutant with the maximum CAI value:', max_pollutant_kr)
+    st.write('Korea CAI General Message:', aqi_data_kr[max_pollutant_kr][1])
+    st.write('Korea CAI Health Message:', aqi_data_kr[max_pollutant_kr][2])
 elif option == 'UK':
     st.write('UK DAQI:', daqi_uk)
+    st.write('Pollutant with the maximum DAQI value:', max_pollutant_uk)
+    st.write('UK DAQI General Message:', aqi_data_uk[max_pollutant_uk][1])
+    st.write('UK DAQI Health Message:', aqi_data_uk[max_pollutant_uk][2])
 elif option == 'Canada':
     st.write('Canada AQI:', aqhi_ca)
 elif option == 'Singapore':
     st.write('Singapore PSI:', aqi_sg)
-    st.write('Pollutant with the maximum AQI value:', max_pollutant)
-    st.write('Singapore PSI General Message:', aqi_data_sg[max_pollutant][1])
+    st.write('Pollutant with the maximum AQI value:', max_pollutant_sg)
+    st.write('Singapore PSI General Message:', aqi_data_sg[max_pollutant_sg][1])
+    st.write('Singapore PSI Health Message:', aqi_data_sg[max_pollutant_sg][2])
