@@ -133,47 +133,107 @@ aqhi_ca, aqi_data_ca, _ = aqhi_ca.get_aqhi(pm10_3h=mean_pm10_3h, pm25_3h=mean_pm
 ########################################
 # Streamlit
 ########################################
-
+st.set_page_config(layout="wide")
 st.title('Bangkok Air Quality Index (AQI) Dashboard')
 st.write('This dashboard provides real-time air quality data for Bangkok, Thailand.')
-
-st.header('Current Air Quality Data')
 option = st.sidebar.radio(
     "Select the AQI calculation method:",
     ('Australia', 'EU', 'China', 'US', 'Korea', 'UK', 'Canada', 'Singapore')
 )
+# Create two rows
+row1_1, row1_2 = st.columns(2)
 
-if option == 'Australia':
-    st.write('Australia AQI:', aqi_au)
-    st.write('Pollutant with the maximum AQI value:', max_pollutant_au)
-    st.write('Australia AQI General Message:', aqi_data_au[max_pollutant_au][1])
-    st.write('Australia AQI Health Message:', aqi_data_au[max_pollutant_au][2])
-elif option == 'EU':
-    st.write('EU CAQI:', caqi_eu)
-elif option == 'China':
-    st.write('China AQI:', aqi_cn)
-    st.write('Pollutant with the maximum AQI value:', max_pollutant_cn)
-    st.write('China AQI General Message:', aqi_data_cn[max_pollutant_cn][1])
-    st.write('China AQI Health Message:', aqi_data_cn[max_pollutant_cn][2])
-elif option == 'US':
-    st.write('US AQI:', aqi_us)
-    st.write('Pollutant with the maximum AQI value:', max_pollutant_us)
-    st.write('US AQI General Message:', aqi_data_us[max_pollutant_us][1])
-    st.write('US AQI Health Message:', aqi_data_us[max_pollutant_us][2])
-elif option == 'Korea':
-    st.write('Korea CAI:', cai_kr)
-    st.write('Pollutant with the maximum CAI value:', max_pollutant_kr)
-    st.write('Korea CAI General Message:', aqi_data_kr[max_pollutant_kr][1])
-    st.write('Korea CAI Health Message:', aqi_data_kr[max_pollutant_kr][2])
-elif option == 'UK':
-    st.write('UK DAQI:', daqi_uk)
-    st.write('Pollutant with the maximum DAQI value:', max_pollutant_uk)
-    st.write('UK DAQI General Message:', aqi_data_uk[max_pollutant_uk][1])
-    st.write('UK DAQI Health Message:', aqi_data_uk[max_pollutant_uk][2])
-elif option == 'Canada':
-    st.write('Canada AQI:', aqhi_ca)
-elif option == 'Singapore':
-    st.write('Singapore PSI:', aqi_sg)
-    st.write('Pollutant with the maximum AQI value:', max_pollutant_sg)
-    st.write('Singapore PSI General Message:', aqi_data_sg[max_pollutant_sg][1])
-    st.write('Singapore PSI Health Message:', aqi_data_sg[max_pollutant_sg][2])
+# Add content to the first row, first column
+with row1_1:
+    st.subheader("Bangkok's Air Quality Problem")
+
+    st.image('./assets/tuktuk.jpg', caption='Bangkok Tuk Tuk')
+# Add content to the first row, second column
+with row1_2:
+    st.subheader('Current Weather Data')
+    st.write('Temperature:', recent_data_1h['temperature'].iloc[-1], '°C')
+    st.write('Humidity:', recent_data_1h['h'].iloc[-1], '%')
+    st.write('Pressure:', recent_data_1h['pressure'].iloc[-1], 'mbar')
+    st.write('Wind Speed:', recent_data_1h['wind'].iloc[-1], 'm/s')
+    st.subheader('Current Air Quality Data')
+    if option == 'Australia':
+        st.write('Australia AQI:', aqi_au)
+        st.write('Pollutant with the maximum AQI value:', max_pollutant_au)
+        st.write('Australia AQI General Message:', aqi_data_au[max_pollutant_au][1])
+        st.write('Australia AQI Health Message:', aqi_data_au[max_pollutant_au][2])
+    elif option == 'EU':
+        st.write('EU CAQI:', caqi_eu)
+    elif option == 'China':
+        st.write('China AQI:', aqi_cn)
+        st.write('Pollutant with the maximum AQI value:', max_pollutant_cn)
+        st.write('China AQI General Message:', aqi_data_cn[max_pollutant_cn][1])
+        st.write('China AQI Health Message:', aqi_data_cn[max_pollutant_cn][2])
+    elif option == 'US':
+        st.write('US AQI:', aqi_us)
+        st.write('Pollutant with the maximum AQI value:', max_pollutant_us)
+        st.write('US AQI General Message:', aqi_data_us[max_pollutant_us][1])
+        st.write('US AQI Health Message:', aqi_data_us[max_pollutant_us][2])
+    elif option == 'Korea':
+        st.write('Korea CAI:', cai_kr)
+        st.write('Pollutant with the maximum CAI value:', max_pollutant_kr)
+        st.write('Korea CAI General Message:', aqi_data_kr[max_pollutant_kr][1])
+        st.write('Korea CAI Health Message:', aqi_data_kr[max_pollutant_kr][2])
+    elif option == 'UK':
+        st.write('UK DAQI:', daqi_uk)
+        st.write('Pollutant with the maximum DAQI value:', max_pollutant_uk)
+        st.write('UK DAQI General Message:', aqi_data_uk[max_pollutant_uk][1])
+        st.write('UK DAQI Health Message:', aqi_data_uk[max_pollutant_uk][2])
+    elif option == 'Canada':
+        st.write('Canada AQI:', aqhi_ca)
+    elif option == 'Singapore':
+        st.write('Singapore PSI:', aqi_sg)
+        st.write('Pollutant with the maximum AQI value:', max_pollutant_sg)
+        st.write('Singapore PSI General Message:', aqi_data_sg[max_pollutant_sg][1])
+        st.write('Singapore PSI Health Message:', aqi_data_sg[max_pollutant_sg][2])
+
+# Create the second row
+row2 = st.container()
+
+# Add content to the second row
+with row2:
+    st.subheader('Current Pollutant Levels')
+    st.write("These are the current pollutant levels; however, notice that the different country's methods yield different AQI values.")
+    pollutants = ['co ppm', 'no2 ppm', 'o3 ppm', 'pm10 μg/m3', 'pm25 μg/m3', 'so2 ppm']
+    mean_values = [mean_co_1h, mean_no2_1h, mean_o3_1h, mean_pm10_1h, mean_pm25_1h, mean_so2_1h]
+
+    fig, ax1 = plt.subplots(figsize=(10, 2.5))  
+    fig.patch.set_facecolor('black')
+    ax1.set_facecolor('black')
+
+    color = 'tab:blue'
+    ax1.set_xlabel('Pollutants', color='white')
+    ax1.set_ylabel('Mean Values (1h) - Gases', color=color)
+    ax1.bar(pollutants[:3] + pollutants[5:], mean_values[:3] + mean_values[5:], color=color)
+    ax1.tick_params(axis='y', labelcolor=color)
+    ax1.tick_params(axis='x', colors='white')
+
+    ax2 = ax1.twinx()  
+    color = 'tab:orange'
+    ax2.set_ylabel('Mean Values (1h) - Particulates', color=color)
+    ax2.bar(pollutants[3:5], mean_values[3:5], color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+
+    ax1.set_title('Mean Values of Pollutants in the Last 1 Hour', color='white')
+
+    fig.tight_layout()  
+
+
+    st.pyplot(fig)
+
+    st.write('source: https://document.airnow.gov/technical-assistance-document-for-the-reporting-of-daily-air-quailty.pdf')
+    st.write('source: https://www.airnow.gov/sites/default/files/2018-05/aqi-technical-assistance-document-may2016.pdf')
+    st.write('source: https://www.haze.gov.sg/docs/default-source/faq/computation-of-the-pollutant-standards-index-(psi).pdf')
+    st.write('source: https://www.eea.europa.eu/themes/air/air-quality-index')
+    st.write('source: https://uk-air.defra.gov.uk/assets/documents/reports/cat14/1304251155_Update_on_Implementation_of_the_DAQI_April_2013_Final.pdf')
+    st.write('source: https://www.airqualityontario.com/science/aqhi/')
+    st.write('source: https://www.airqualitynow.eu/download/CITEAIR-Comparing_Urban_Air_Quality_across_Borders.pdf')
+    st.write('source: https://www.airkorea.or.kr/web/last_amb_hour_data?pMENU_NO=123')
+    st.write('source: http://www.airkorea.or.kr/eng/khaiInfo?pMENU_NO=166')
+    st.write('source: https://core.ac.uk/download/pdf/38094372.pdf')
+    st.write('source: https://www.environment.nsw.gov.au/topics/air/understanding-air-quality-data/air-quality-index')
+
