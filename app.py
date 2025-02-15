@@ -144,18 +144,18 @@ option = st.sidebar.radio(
 )
 
 if option == 'Australia':
-    st.write('Australia AQI:', aqi_au)
+    st.write('Australia AQHI:', aqi_au)
 elif option == 'EU':
-    st.write('EU AQI:', caqi_eu)
+    st.write('EU CAQI:', caqi_eu)
 elif option == 'China':
     st.write('China AQI:', aqi_cn)
 elif option == 'US':
     st.write('US AQI:', aqi_us)
 elif option == 'Korea':
-    st.write('Korea AQI:', cai_kr)
+    st.write('Korea CAI:', cai_kr)
 elif option == 'UK':
-    st.write('UK AQI:', daqi_uk)
+    st.write('UK DAQI:', daqi_uk)
 elif option == 'Canada':
     st.write('Canada AQI:', aqhi_ca)
 elif option == 'Singapore':
-    st.write('Singapore AQI:', aqi_sg)
+    st.write('Singapore PSI:', aqi_sg)
