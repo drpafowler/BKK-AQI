@@ -6,6 +6,9 @@ There are a number of different approaches to calculating an air quality index. 
 
 Note that the AQI is a number that is used to communicate how polluted the air is.  The higher the number, the more polluted the air is.  The AQI is calculated based on the concentration of pollutants in the air.  The pollutants that are used to calculate the AQI are: PM2.5, PM10, O3, NO2, SO2, and CO.  The AQI is calculated based on the concentration of these pollutants in the air.  In many places on the interweb you will see the PM2.5 value reported as the AQI.  PM25 is a measure of a certain size of particulate. However, sometimes it is not the particulates that are the problem.  Sometimes it is the gases that are the problem.  Thus, a properly calculated AQI will take into account all of the pollutants.  
 
+One of the surprising things about this project is that there does not seem to be a standard way to calculate the AQI.  Many countries have their own algorithms.  However, on the internet you often see the PM25 values serving as the AQI.  Done properly, AQI uses at least five values. CO, NO2, O3, SO2, PM10, and PM25.  The AQI is calculated based on the concentration of these pollutants.  Some countries, such as India, also include Pb and NH3. Other countries, such as Canada, omit CO and SO2.  
+
+AQI can be thought of as a running average.  The length of the running average varies considerably between countries.  Hong Kong and Canada use a 3 hour interval.  The US uses 24 hours for particulates and 8 hours and 1 hour for gases.  For the UK, the interval can be as short as 15 minutes.
 
 ## Author(s)
 Philip Fowler
@@ -22,6 +25,7 @@ Create your usual virtual environment based on python 3.11. This won't work with
 ## You will need to install the necessary packages.  You can do this by running the following command:
 
 ```python
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -49,6 +53,15 @@ Or be lazy like I am and just click the Docker Desktop icon on your toolbar.  Th
 ```python
 python3.11 producer.py
 ```
+note: on your computer it could be something like:
+```python
+py -3.11 producer.py
+```
+or
+```python
+python3 producer.py
+```
+Use the variation that is correct for your computer.
 
 ## Start the consumer by running the following command:
 
