@@ -14,8 +14,7 @@ from aqipy import cai_kr
 from aqipy import daqi_uk
 from aqipy import aqhi_ca
 from aqipy import psi_sg
-
-# Load data
+import time
 import os
 
 ########################################
@@ -140,6 +139,8 @@ option = st.sidebar.radio(
     "Select the AQI calculation method:",
     ('Australia', 'EU', 'China', 'US', 'Korea', 'UK', 'Canada', 'Singapore')
 )
+# refresh_interval = st.sidebar.selectbox("Select refresh interval (seconds):", [5, 10, 30, 60, 120, 300])
+
 # Create two rows
 row1_1, row1_2 = st.columns(2)
 
