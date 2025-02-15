@@ -35,12 +35,13 @@ Or be lazy like I am and just click the Docker Desktop icon on your toolbar.  Th
 
 ## Start the producer by running the following command:
 
-```
+```python
 python3.11 producer.py
 ```
 
 ## Start the consumer by running the following command:
-```
+
+```python
 python3.11 consumer.py
 ```
 
@@ -48,7 +49,8 @@ Note: The consumer will create a database called bkk_aqi.db.  This database will
 
 
 ## To start the notification program, you will need to run the following command:
-``` 
+
+```python 
 python3.11 main.py
 ```
 
@@ -64,6 +66,7 @@ streamlit run app.py
 First, use the .env example file to add your own information.  Save it as .env Then, run the following command to install the necessary packages:
 
 # Dockerfile, Image, Container
+```
 FROM python:3.11
 
 ADD main.py .
@@ -73,6 +76,7 @@ RUN pip install requests python-dotenv twilio
 
 CMD ["python", "./main.py"]
 ```
+
 Note: the first version of this used Twilio.  The subsequent version used pushover.  Pushover is a better choice.
 
 ## Air Quality Notebook - Used to determine how to perform calculations
