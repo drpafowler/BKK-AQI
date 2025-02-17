@@ -18,98 +18,53 @@ Philip Fowler
 # Usage
 ## Instructions on how to use this project.
 You will need an WAQI API key from https://aqicn.org/api/ to use this project  
-You will need a Pushover account to use this project.  You can get one at https://pushover.net/ Make sure that the app is installed on your phone too.
 
-You will need to create a .env based on the .env example template.
+You will need to create a .env based on the .env example template.  You will need to add your WAQI API key to the .env file.  
 
-Create your usual virtual environment based on python 3.11. This won't work with 3.12. I am assuming that you know how to do this. If you don't, you can find instructions at https://docs.python.org/3/library/venv.html
+## Installation
+To install Docker, follow these steps:
 
-## You will need to install the necessary packages.  You can do this by running the following command:
+1. **Install Docker Desktop:**
+    - **Windows and macOS:**
+      - Download Docker Desktop from [Docker's official website](https://www.docker.com/products/docker-desktop).
+      - Follow the installation instructions provided on the website.
+    - **Linux:**
+      - Follow the instructions for your specific distribution on the [Docker Engine installation page](https://docs.docker.com/engine/install/).
 
-```python
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+2. **Verify Docker Installation:**
+    - Open a terminal or command prompt.
+    - Run the following command to verify that Docker is installed correctly:
+      ```bash
+      docker --version
+      ```
 
-## You are going to need to start your usual Kafka and Zookeeper services.  
-You can do this by running the following command:
+To install the Docker extension for Visual Studio Code, follow these steps:
 
-From a terminal
+1. **Open Visual Studio Code:**
+    - Launch Visual Studio Code on your computer.
+
+2. **Install the Docker Extension:**
+    - Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing `Ctrl+Shift+X`.
+    - In the Extensions view, search for "Docker".
+    - Click on the "Install" button next to the Docker extension by Microsoft.
+
+3. **Verify the Extension Installation:**
+    - Once installed, you should see a Docker icon in the Activity Bar.
+    - Click on the Docker icon to open the Docker view and verify that the extension is working correctly.
+
+You are now ready to use Docker and the Docker extension in Visual Studio Code.
+
+
+## To create the Docker container from the Dockerfile, you can use the following commands:
+
 ```bash
-kafka-server-start /usr/local/etc/kafka/server.properties
-```
-and
-```bash
-zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties
-```
-Or, if you are using docker for your zookeeper and kafka services, you can start them by running the following command:
+docker build -t bkk-aqi .
 
-```bash
-docker-compose up
+docker run --env-file .env bkk-aqi
 ```
 
-Or be lazy like I am and just click the Docker Desktop icon on your toolbar.  This will start the services for you too.
-
-## Start the producer by running the following command:
-
-```python
-python3.11 producer.py
-```
-note: on your computer it could be something like:
-```python
-py -3.11 producer.py
-```
-or
-```python
-python3 producer.py
-```
-Use the variation that is correct for your computer.
-
-## Start the consumer by running the following command:
-
-```python
-python3.11 consumer.py
-```
-
-Note: The consumer will create a database called bkk_aqi.db.  This database will be used to store the air quality data.  
-
-
-## To start the notification program, you will need to run the following command:
-
-```python 
-python3.11 main.py
-```
-
-## To start the streamlit dashboard, you will need to run the following command:
-
-```
-streamlit run app.py
-```
 You should end up with a dashboard that looks like this:
 ![Dashboard Screenshot](assets/screenshot.png)
-
-# Archived Materials - This is just for reference  
-## Phone Notifications - Proof of Concept - located in the archived folder
-First, use the .env example file to add your own information.  Save it as .env Then, run the following command to install the necessary packages:
-
-## Dockerfile, Image, Container
-```
-FROM python:3.11
-
-ADD main.py .
-ADD .env .
-
-RUN pip install requests python-dotenv twilio
-
-CMD ["python", "./main.py"]
-```
-
-Note: the first version of this used Twilio.  The subsequent version used pushover.  Pushover is a better choice.
-
-## Air Quality Notebook - Used to determine how to perform calculations
-This was done in the notebook file AQI-Analysis.ipynb
-The notebook was developed in conjunction with the bkk_aqi.db database.  The database was previously created by running consumer.py
-The notebook does not automatically update from the database.  You will have to keep clicking run all to update things.  This is not ideal.  However, it is a proof of concept.  The final version will be a streamlit dashboard that will automatically update.
 
 
 
