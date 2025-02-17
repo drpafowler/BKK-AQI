@@ -55,11 +55,11 @@ To install Docker, follow these steps:
 
 ## Clone this repository using the following command:
 
-'''bash
+```bash
 git clone -b dockerversion https://github.com/drpafowler/BKK-AQI.git
 
 cd BKK-AQI
-''' 
+``` 
 
 ## To create the Docker container from the Dockerfile, use the following commands:
 
