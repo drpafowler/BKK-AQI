@@ -16,16 +16,21 @@ from aqipy import aqhi_ca
 from aqipy import psi_sg
 import time
 import os
+import subprocess
+
 
 ########################################
 # connect to the db and load the data
 ########################################
+if 'aqi_data' not in st.session_state:
+    conn = sqlite3.connect('./data/bkk_aqi.db')
+    c = conn.cursor()
+    st.session_state.aqi_data = pd.read_sql_query("SELECT * FROM aqi_data", conn)
+    st.session_state.aqi_data['time_iso'] = pd.to_datetime(st.session_state.aqi_data['time_iso'])
+    st.session_state.aqi_data = st.session_state.aqi_data.set_index('time_iso')
 
-conn = sqlite3.connect('./data/bkk_aqi.db')
-c = conn.cursor()
-aqi_data = pd.read_sql_query("SELECT * FROM aqi_data", conn)
-aqi_data['time_iso'] = pd.to_datetime(aqi_data['time_iso'])
-aqi_data = aqi_data.set_index('time_iso')
+# Use the session state variable
+aqi_data = st.session_state.aqi_data
 
 ########################################
 # organize the necessary data

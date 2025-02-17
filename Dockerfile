@@ -1,12 +1,18 @@
-# Dockerfile, Image, Container
 FROM python:3.11
 
 ADD main.py .
 ADD app.py .
 ADD .env .
 
-RUN pip install requests python-dotenv pandas matplotlib plotly aqipy-atmotech streamlit 
+RUN mkdir -p /data
+RUN mkdir -p /assets
+ADD data/* /data/
+ADD assets/* /assets/
+
+RUN pip install --no-cache-dir requests python-dotenv pandas matplotlib plotly aqipy-atmotech streamlit seaborn
 
 EXPOSE 8501
 
-CMD ["sh", "-c", "python main.py & streamlit run app.py"]
+HEALTHCHECK CMD ["curl", "-f", "http://localhost:8501"] # Add a healthcheck
+
+CMD ["sh", "-c", "python3 main.py"]

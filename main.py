@@ -12,6 +12,7 @@ import time
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import sqlite3
+import subprocess
 
 
 # Load environment variables
@@ -79,7 +80,16 @@ def sql_connect():
 def consume_and_store():
     conn, c = sql_connect()
     while True:
-        
+        def check_streamlit_running():
+            """Check if the streamlit app is running, if not, start it."""
+            result = subprocess.run(['pgrep', '-f', 'streamlit run app.py'], stdout=subprocess.PIPE)
+            if result.returncode != 0:
+                print("Streamlit app is not running. Starting it now...")
+                subprocess.Popen(['streamlit', 'run', 'app.py'])
+            else:
+                print("Streamlit app is already running.")
+
+        check_streamlit_running()
         data = get_aqi_data()
         print(f"Current AQI Data: {data}")
 

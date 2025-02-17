@@ -21,6 +21,8 @@ You will need an WAQI API key from https://aqicn.org/api/ to use this project
 
 You will need to create a .env based on the .env example template.  You will need to add your WAQI API key to the .env file.  
 
+
+
 ## Installation
 To install Docker, follow these steps:
 
@@ -38,29 +40,36 @@ To install Docker, follow these steps:
       docker --version
       ```
 
-To install the Docker extension for Visual Studio Code, follow these steps:
+3. **Install Docker Compose:**  
+    - **Windows and macOS:**
+      - Docker Desktop comes with Docker Compose pre-installed.
+    - **Linux:**
+      - Follow the instructions on the [Docker Compose installation page](https://docs.docker.com/compose/install/).
 
-1. **Open Visual Studio Code:**
-    - Launch Visual Studio Code on your computer.
+4. **Verify Docker Compose Installation:**
+    - Open a terminal or command prompt.
+    - Run the following command to verify that Docker Compose is installed correctly:
+      ```bash
+      docker-compose --version
+      ```
 
-2. **Install the Docker Extension:**
-    - Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or by pressing `Ctrl+Shift+X`.
-    - In the Extensions view, search for "Docker".
-    - Click on the "Install" button next to the Docker extension by Microsoft.
+## Clone this repository using the following command:
 
-3. **Verify the Extension Installation:**
-    - Once installed, you should see a Docker icon in the Activity Bar.
-    - Click on the Docker icon to open the Docker view and verify that the extension is working correctly.
+'''bash
+git clone -b dockerversion https://github.com/drpafowler/BKK-AQI.git
 
-You are now ready to use Docker and the Docker extension in Visual Studio Code.
+cd BKK-AQI
+''' 
 
-
-## To create the Docker container from the Dockerfile, you can use the following commands:
+## To create the Docker container from the Dockerfile, use the following commands:
 
 ```bash
 docker build -t bkk-aqi .
+```
+and then run the container with the following command:
 
-docker run --env-file .env bkk-aqi
+```bash
+docker run -p 8501:8501 bkk-aqi 
 ```
 
 You should end up with a dashboard that looks like this:
