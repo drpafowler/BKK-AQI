@@ -3,6 +3,7 @@ import sqlite3
 from kafka import KafkaConsumer
 from kafka.errors import KafkaError
 import time
+import os
 
 '''
 example data: {'aqi': 138, 'co': 0.1, 'h': 48, 'no2': 2.4, 'o3': 19.4, 'pressure': 1010, 'pm10': 58, 'pm25': 138, 'so2': 0.6, 'temperature': 30, 'wind': 2, 'time_iso': '2025-02-13T20:00:00+07:00', 'city_geo': [13.7563309, 100.5017651], 'city_name': 'Bangkok'}
@@ -12,7 +13,9 @@ example data: {'aqi': 138, 'co': 0.1, 'h': 48, 'no2': 2.4, 'o3': 19.4, 'pressure
 KAFKA_TOPIC = 'bkk-aqi'
 KAFKA_BROKER = 'localhost:9092'
 
-def sql_connect():
+def sql_connect(): 
+    if not os.path.exists('data'):
+        os.makedirs('data')
     conn = sqlite3.connect('data/bkk_aqi.db')
     c = conn.cursor()
     c.execute('''
