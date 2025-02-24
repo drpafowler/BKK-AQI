@@ -26,6 +26,7 @@ def get_aqi_data():
     data = response.json()
     
     if data['status'] == 'ok':
+        # Extract relevant AQI data from the response
         aqi_data = {
             "aqi": data['data']['aqi'],
             "co": data['data']['iaqi']['co']['v'],
@@ -44,17 +45,26 @@ def get_aqi_data():
         }
         return aqi_data
     else:
+        # Raise an error if the API response status is not 'ok'
         raise ValueError("Error fetching AQI data")
 
 def main():
+    # Initialize Kafka producer
     producer = KafkaProducer(bootstrap_servers=KAFKA_BROKER, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+    
     while True:
         try:
+            # Fetch AQI data
             aqi_data = get_aqi_data()
             print(f"Current AQI Data: {aqi_data}")
+            
+            # Send AQI data to Kafka topic
             producer.send(KAFKA_TOPIC, aqi_data)
+            
+            # Wait for 5 minutes before fetching data again
             time.sleep(300)
         except Exception as e:
+            # Print any errors that occur
             print(f"Error: {e}")
 
 if __name__ == "__main__":

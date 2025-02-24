@@ -24,8 +24,16 @@ Create your usual virtual environment based on python 3.11. This won't work with
 
 ## You will need to install the necessary packages.  You can do this by running the following command:
 
-```python
+```bash
+python3.11 -m venv .venv
 source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Note: If you are using Windows, you will need to use the following commands:
+```bash
+python3.11 -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -53,13 +61,13 @@ Or be lazy like I am and just click the Docker Desktop icon on your toolbar.  Th
 ```python
 python3.11 producer.py
 ```
-note: on your computer it could be something like:
+note: on a windows computer it should be something like:
 ```python
 py -3.11 producer.py
 ```
 or
 ```python
-python3 producer.py
+python producer.py
 ```
 Use the variation that is correct for your computer.
 
@@ -68,6 +76,16 @@ Use the variation that is correct for your computer.
 ```python
 python3.11 consumer.py
 ```
+note: on a windows computer it should be something like:
+```python
+py -3.11 consumer.py
+```
+or
+```python
+python consumer.py
+```
+Use the variation that is correct for your computer.
+
 
 Note: The consumer will create a database called bkk_aqi.db.  This database will be used to store the air quality data.  
 
@@ -77,6 +95,15 @@ Note: The consumer will create a database called bkk_aqi.db.  This database will
 ```python 
 python3.11 main.py
 ```
+note: on a windows computer it should be something like:
+```python
+py -3.11 main.py
+```
+or
+```python
+python main.py
+```
+Use the variation that is correct for your computer.
 
 ## To start the streamlit dashboard, you will need to run the following command:
 

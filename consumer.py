@@ -13,11 +13,15 @@ example data: {'aqi': 138, 'co': 0.1, 'h': 48, 'no2': 2.4, 'o3': 19.4, 'pressure
 KAFKA_TOPIC = 'bkk-aqi'
 KAFKA_BROKER = 'localhost:9092'
 
+# Function to connect to SQLite database and create table if it doesn't exist
 def sql_connect(): 
+    # Create data directory if it doesn't exist
     if not os.path.exists('data'):
         os.makedirs('data')
+    # Connect to SQLite database
     conn = sqlite3.connect('data/bkk_aqi.db')
     c = conn.cursor()
+    # Create table for AQI data if it doesn't exist
     c.execute('''
         CREATE TABLE IF NOT EXISTS aqi_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,10 +42,12 @@ def sql_connect():
             city_name TEXT
         )
     ''')
+    # Commit the changes
     conn.commit()
     return conn, c
 
 def consume_and_store():
+    # Create Kafka consumer
     consumer = KafkaConsumer(
         KAFKA_TOPIC,
         bootstrap_servers=[KAFKA_BROKER],
@@ -51,36 +57,43 @@ def consume_and_store():
         value_deserializer=lambda x: json.loads(x.decode('utf-8'))
     )
 
+    # Connect to SQLite database
     conn, c = sql_connect()
 
+    # Consume messages from Kafka topic
     for message in consumer:
         data = message.value
         timestamp = data.get('timestamp')
         aqi = data.get('aqi')
+
+        # Fetch the last row from the database
         c.execute('SELECT * FROM aqi_data ORDER BY id DESC LIMIT 1')
         last_row = c.fetchone()
         
+        # Check if the new data is the same as the last entry
         if last_row:
             last_data = {
-            'aqi': last_row[1],
-            'co': last_row[2],
-            'h': last_row[3],
-            'no2': last_row[4],
-            'o3': last_row[5],
-            'pressure': last_row[6],
-            'pm10': last_row[7],
-            'pm25': last_row[8],
-            'so2': last_row[9],
-            'temperature': last_row[10],
-            'wind': last_row[11],
-            'time_iso': last_row[12],
-            'city_geo': [last_row[13], last_row[14]],
-            'city_name': last_row[15]
+                'aqi': last_row[1],
+                'co': last_row[2],
+                'h': last_row[3],
+                'no2': last_row[4],
+                'o3': last_row[5],
+                'pressure': last_row[6],
+                'pm10': last_row[7],
+                'pm25': last_row[8],
+                'so2': last_row[9],
+                'temperature': last_row[10],
+                'wind': last_row[11],
+                'time_iso': last_row[12],
+                'city_geo': [last_row[13], last_row[14]],
+                'city_name': last_row[15]
             }
             
             if data == last_data:
                 print("Data is the same as the last entry, skipping insert.")
                 continue
+        
+        # Insert new data into the database
         c.execute('''
             INSERT INTO aqi_data (aqi, co, h, no2, o3, pressure, pm10, pm25, so2, temperature, wind, time_iso, city_geo_lat, city_geo_lon, city_name)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -104,6 +117,7 @@ def consume_and_store():
         conn.commit()
         print(f"Inserted data: {data}")
 
+    # Close the database connection
     conn.close()
 
 if __name__ == "__main__":
